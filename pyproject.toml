@@ -1,0 +1,17 @@
+[project]
+name = "game-controller-scripts"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "mockxe", email = "38732499+mockxe@users.noreply.github.com"},
+]
+dependencies = [
+    "evdev>=1.7.0",
+]
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
