@@ -5,7 +5,6 @@ from evdev import ecodes, UInput, InputDevice, list_devices
 import virtual_actions
 
 
-# TODO implement bullet-proof graceful shutdown
 def main():
     # get all devices
     devices = [InputDevice(path) for path in list_devices()]
@@ -36,16 +35,8 @@ def main():
         sys.exit(1)
 
     # create out virtual input device
-    virtual_device = create_virtual_device(device)
-
-    try:
+    with create_virtual_device(device) as virtual_device:
         listen(device, virtual_device)
-
-    except Exception as e:
-        print(f"an error occurred: {e}")
-
-    finally:
-        unreg_virtual_device(virtual_device)
 
 
 def listen(device: InputDevice, virtual_device: UInput):
@@ -91,11 +82,6 @@ def create_virtual_device(device: InputDevice) -> UInput:
 
     print("registered new virtual input device")
     return virtual_device
-
-
-def unreg_virtual_device(virtual_device: UInput):
-    virtual_device.close()
-    print("unregistered virtual input device")
 
 
 if __name__ == "__main__":
