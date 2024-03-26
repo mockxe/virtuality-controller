@@ -40,7 +40,7 @@ def main():
 
 
 def listen(device: InputDevice, virtual_device: UInput):
-    print(f"listening to '{device.name}'")
+    print(f"listening to '{device.name}' on '{device.path}'")
 
     for event in device.read_loop():
         # TODO refactor: better method for mapping buttons to actions
@@ -66,7 +66,7 @@ def create_virtual_device(device: InputDevice) -> UInput:
         name="Virtual Controller",
     )
 
-    print("registered new virtual input device")
+    print(f"registered new virtual input device on '{virtual_device.device.path}'")
     return virtual_device
 
 
