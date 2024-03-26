@@ -54,30 +54,16 @@ def listen(device: InputDevice, virtual_device: UInput):
                 virtual_actions.vol_down(virtual_device)
 
 
-# TODO refactor: figure out what's actually required
 def create_virtual_device(device: InputDevice) -> UInput:
-    caps = {
-        ecodes.EV_MSC: [ecodes.MSC_SCAN],
+    # required events for the controller to show up as game controller
+    events = {
+        ecodes.EV_ABS: [ecodes.ABS_X, ecodes.ABS_Y],  # create a fake absolute X- and Y-axis
+        ecodes.EV_KEY: [ecodes.BTN_TRIGGER],  # create a fake single trigger button
     }
 
-    if ecodes.EV_ABS in device.capabilities():
-        caps[ecodes.EV_ABS] = device.capabilities()[ecodes.EV_ABS]
-    else:
-        # Some devices do not have axis, so fake at least two axis
-        caps[ecodes.EV_ABS] = [ecodes.ABS_X, ecodes.ABS_Y]
-
-    if ecodes.EV_KEY in device.capabilities():
-        caps[ecodes.EV_KEY] = device.capabilities()[ecodes.EV_KEY]
-    else:
-        # Some devices do not have buttons, so fake at least one button
-        caps[ecodes.EV_KEY] = [ecodes.BTN_JOYSTICK, ecodes.BTN_TRIGGER]
-
     virtual_device = UInput(
-        events=caps,
+        events=events,
         name="Virtual Controller",
-        vendor=device.info.vendor,
-        product=device.info.product,
-        version=device.info.version
     )
 
     print("registered new virtual input device")
