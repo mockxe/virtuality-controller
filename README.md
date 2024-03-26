@@ -1,4 +1,4 @@
-# game-controller-scripts
+# virtuality-controller
 
 A collection if Python scripts to modify game controller behavior for certain games.
 Like a macro/mapping software but everything is handwritten.

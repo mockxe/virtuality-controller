@@ -1,5 +1,5 @@
 [project]
-name = "game-controller-scripts"
+name = "virtuality-controller"
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
@@ -17,4 +17,4 @@ license = {text = "MIT"}
 distribution = false
 
 [tool.pdm.scripts]
-start = "python src/game_controller_scripts/main.py"
+start = "python src/virtuality-controller/main.py"

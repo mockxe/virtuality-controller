@@ -48,7 +48,7 @@ def create_virtual_device(virtual_actions: List[VirtualAction]) -> UInput:
 
     virtual_device = UInput(
         events=events,
-        name="Virtual Controller",
+        name="Virtuality Controller",
     )
 
     print(f"registered new virtual input device at '{virtual_device.device.path}'")
