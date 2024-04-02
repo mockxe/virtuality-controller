@@ -1,3 +1,4 @@
+import asyncio
 import sys
 from typing import List
 
@@ -8,7 +9,7 @@ import virtuality
 from virtual_action import VirtualAction
 
 
-def main():
+async def main():
     # get device(s) you want to listen to
     device = manual_device_selection()
 
@@ -31,7 +32,7 @@ def main():
     # create out virtual input device
     with virtuality.create_virtual_device(virtual_actions):
         # start listening to all devices
-        virtuality.listen(device, virtual_actions)
+        await virtuality.listen(device, virtual_actions)
 
 
 def manual_device_selection():
@@ -63,4 +64,4 @@ def manual_device_selection():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -7,14 +7,14 @@ from evdev.ecodes import *
 from virtual_action import VirtualAction
 
 
-def listen(device: InputDevice, virtual_actions: List[VirtualAction]):
+async def listen(device: InputDevice, virtual_actions: List[VirtualAction]):
     print(f"listening to '{device.name}' on '{device.path}'")
 
     key_actions: List[VirtualAction] = [action for action in virtual_actions if EV_KEY in action.input_events.keys()]
     rel_actions: List[VirtualAction] = [action for action in virtual_actions if EV_REL in action.input_events.keys()]
     abs_actions: List[VirtualAction] = [action for action in virtual_actions if EV_ABS in action.input_events.keys()]
 
-    for event in device.read_loop():
+    async for event in device.async_read_loop():
         if event.type == EV_KEY:
             [action.call(event) for action in key_actions if event.code in action.input_events[EV_KEY]]
 

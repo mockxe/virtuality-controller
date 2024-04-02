@@ -1,4 +1,5 @@
-from typing import List, Callable, Dict
+import asyncio
+from typing import List, Callable, Dict, Awaitable
 
 from evdev import UInput, InputEvent
 
@@ -8,14 +9,14 @@ class VirtualAction:
     name: str
     input_events: Dict[int, List[int]]
     output_events: Dict[int, List[int]]
-    function: Callable[[UInput, InputEvent], None]
+    function: Callable[[UInput, InputEvent], Awaitable[None]]
 
     def __init__(
             self,
             name: str,
             input_events: Dict[int, List[int]],
             output_events: Dict[int, List[int]],
-            function: Callable[[UInput, InputEvent], None]
+            function: Callable[[UInput, InputEvent], Awaitable[None]]
     ):
         self.virtual_device = None
         self.name = name
@@ -29,7 +30,7 @@ class VirtualAction:
 
         else:
             print(f"action '{self.name}' was called with {event}")
-            self.function(self.virtual_device, event)
+            asyncio.create_task(self.function(self.virtual_device, event))
 
     def register(self, virtual_device: UInput) -> None:
         self.virtual_device = virtual_device
