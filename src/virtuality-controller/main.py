@@ -4,9 +4,9 @@ from typing import List
 
 from evdev import ecodes, InputDevice, list_devices
 
-import my_virtual_actions
 import virtuality
 from virtual_action import VirtualAction
+from controls import StickyTimeout
 
 
 async def main():
@@ -16,16 +16,16 @@ async def main():
     # register all your virtual actions here
     virtual_actions: List[VirtualAction] = [
         VirtualAction(
-            "Volume Down",
-            {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY7]},
-            {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY1]},
-            my_virtual_actions.vol_down
-        ),
-        VirtualAction(
             "Volume Up",
             {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY6]},
+            {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY1]},
+            StickyTimeout(ecodes.BTN_TRIGGER_HAPPY1, 0.2).trigger
+        ),
+        VirtualAction(
+            "Volume Down",
+            {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY7]},
             {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY2]},
-            my_virtual_actions.vol_up
+            StickyTimeout(ecodes.BTN_TRIGGER_HAPPY2, 0.2).trigger
         ),
     ]
 

@@ -49,16 +49,16 @@ is that should be executed on an input event. Again, you can find an example in 
 # register all your virtual actions here
 virtual_actions: List[VirtualAction] = [
     VirtualAction(
-        "Volume Down",
-        {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY7]},
-        {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY1]},
-        my_virtual_actions.vol_down
-    ),
-    VirtualAction(
         "Volume Up",
         {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY6]},
+        {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY1]},
+        StickyTimeout(ecodes.BTN_TRIGGER_HAPPY1, 0.2).trigger
+    ),
+    VirtualAction(
+        "Volume Down",
+        {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY7]},
         {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY2]},
-        my_virtual_actions.vol_up
+        StickyTimeout(ecodes.BTN_TRIGGER_HAPPY2, 0.2).trigger
     ),
 ]
 ```
@@ -116,8 +116,40 @@ This defines the actual function which can react to the input event. The functio
 `virtual_device` to send out new input events and the actual input `event` which triggered the virtual action. You can
 add any additional filtering for event values (or event codes if you react to multiple with same action) at the very 
 beginning of the function. Virtual input events can be sent to the virtual device, details can be found in the [evdev
-python documentation](https://python-evdev.readthedocs.io/en/latest/apidoc.html#evdev.uinput.UInput). For a simple
-example, have a look at `my_virtual_actions.py`
+python documentation](https://python-evdev.readthedocs.io/en/latest/apidoc.html#evdev.uinput.UInput). 
+
+Predefined functions with useful behaviors can be found in the `controls` package and are explained below.
+
+
+## controls
+
+### StickyTimeout
+
+Holds an output button as long as an input button is pressed repeatedly. Releases the output button after a configurable
+timeout.
+
+**Instantiation**
+
+```python
+from evdev import ecodes
+from controls import StickyTimeout
+
+StickyTimeout(ecodes.BTN_TRIGGER_HAPPY1, 0.2)
+```
+
+**Usage**
+
+```python
+VirtualAction(
+    "Volume Up",
+    {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY6]},
+    {ecodes.EV_KEY: [ecodes.BTN_TRIGGER_HAPPY1]},
+    StickyTimeout(ecodes.BTN_TRIGGER_HAPPY1, 0.2).trigger
+)
+```
+
+This creates a continues output, which is useful for example for a turning knob which sends individual short key presses
+in games where a longer keypress is expected.
 
 
 ## about the name
